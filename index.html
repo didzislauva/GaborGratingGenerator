@@ -35,38 +35,51 @@
         <div class="control">
           <label for="orientation">Orientation (degrees)</label>
           <div class="slider-container">
-            <input type="range" id="orientation" min="0" max="360" value="0" step="1">
+            <input type="range" id="orientation" min="0" max="180" value="0" step="0.1">
             <output id="orientationValue">0° (0.00 rad)</output>
           </div>
+		  <div class="range-editors">
+			<label>Value: <input type="number" id="orientationInput" value="0" step="0.1"></label>
+			<label>Min: <input type="number" id="orientationMin" value="0"></label>
+			<label>Max: <input type="number" id="orientationMax" value="180"></label>
+			<label>Step: <input type="number" id="orientationStep" value="0.1" step="0.1"></label>
+		  </div>
           <p class="description">Controls the angle of the grating lines. 0° is horizontal, 90° is vertical.</p>
         </div>
         
         <div class="control">
           <label for="phase">Phase (degrees)</label>
           <div class="slider-container">
-            <input type="range" id="phase" min="0" max="360" value="0" step="1">
+            <input type="range" id="phase" min="0" max="180" value="0" step="0.1">
             <output id="phaseValue">0° (0.00 rad)</output>
           </div>
+		  <div class="range-editors">
+			<label>Value: <input type="number" id="phaseInput" value="0"></label>
+			<label>Min: <input type="number" id="phaseMin" value="0"></label>
+			<label>Max: <input type="number" id="phaseMax" value="180"></label>
+			<label>Step: <input type="number" id="phaseStep" value="0.1" step="0.1"></label>
+		  </div>
           <p class="description">Shifts the position of the grating within its envelope. Controls whether the center has a peak or trough.</p>
         </div>
         
         <div class="control">
           <label for="periods">Number of Periods</label>
           <div class="slider-container">
-            <input type="range" id="periods" min="1" max="20" value="5">
+            <input type="range" id="periods" min="1" max="20" value="5" step="0.1">
             <output id="periodsValue">5 (freq: 0.0125 cyc/px)</output>
+			<small id="freqWarning" style="color: red; display: none;">⚠ Frequency ≥ 0.5 cyc/px</small>
+
           </div>
+		  <div class="range-editors">
+			<label>Value: <input type="number" id="periodsInput" value="5"></label>
+			<label>Min: <input type="number" id="periodsMin" value="1"></label>
+			<label>Max: <input type="number" id="periodsMax" value="20"></label>
+			<label>Step: <input type="number" id="periodsStep" value="0.1" step="0.1"></label>
+		  </div>
           <p class="description">Determines the number of complete cycles visible within the stimulus (spatial frequency).</p>
         </div>
         
-        <div class="control">
-          <label for="size">Canvas Size (px)</label>
-          <div class="slider-container">
-            <input type="range" id="size" min="200" max="800" value="400" step="50">
-            <output id="sizeValue">400 px</output>
-          </div>
-          <p class="description">Adjusts the dimensions of the display canvas.</p>
-        </div>
+
         
         <div class="control">
           <label for="sigma">Envelope Width (relative: 0.1–2)</label>
@@ -74,6 +87,12 @@
             <input type="range" id="sigma" min="0.1" max="2" value="1" step="0.01">
             <output id="sigmaValue">σ = auto</output>
           </div>
+		  <div class="range-editors">
+			<label>Value: <input type="number" id="sigmaInput" value="1"></label>
+			<label>Min: <input type="number" id="sigmaMin" value="0.1"></label>
+			<label>Max: <input type="number" id="sigmaMax" value="2"></label>
+			<label>Step: <input type="number" id="sigmaStep" value="0.1" step="0.1"></label>
+		  </div>
           <p class="description">Controls the width of the envelope. Higher values create a broader, more gradual fade-out.</p>
         </div>
         
@@ -100,15 +119,15 @@
             <div class="color-preview" id="color1Preview"></div>
             <div class="color-inputs">
               <div>
-                <label for="color1R" style="font-weight: normal;">R:</label>
+                <label for="color1R" style="font-weight: normal;">Red:</label>
                 <input type="number" id="color1R" min="0" max="255" value="255">
               </div>
               <div>
-                <label for="color1G" style="font-weight: normal;">G:</label>
+                <label for="color1G" style="font-weight: normal;">Green:</label>
                 <input type="number" id="color1G" min="0" max="255" value="255">
               </div>
               <div>
-                <label for="color1B" style="font-weight: normal;">B:</label>
+                <label for="color1B" style="font-weight: normal;">Blue:</label>
                 <input type="number" id="color1B" min="0" max="255" value="255">
               </div>
             </div>
@@ -119,15 +138,15 @@
             <div class="color-preview" id="color2Preview"></div>
             <div class="color-inputs">
               <div>
-                <label for="color2R" style="font-weight: normal;">R:</label>
+                <label for="color2R" style="font-weight: normal;">Red:</label>
                 <input type="number" id="color2R" min="0" max="255" value="0">
               </div>
               <div>
-                <label for="color2G" style="font-weight: normal;">G:</label>
+                <label for="color2G" style="font-weight: normal;">Green:</label>
                 <input type="number" id="color2G" min="0" max="255" value="0">
               </div>
               <div>
-                <label for="color2B" style="font-weight: normal;">B:</label>
+                <label for="color2B" style="font-weight: normal;">Blue:</label>
                 <input type="number" id="color2B" min="0" max="255" value="0">
               </div>
             </div>
@@ -139,7 +158,18 @@
       <div class="card">
         <h2>Preview</h2>
         <div class="canvas-container">
-          <canvas id="gaborCanvas" width="400" height="400"></canvas>
+          <canvas id="gaborCanvas" width="200" height="200"></canvas>
+		  <div class="control">
+          <label for="size">Download Size (px)</label>
+          <div class="slider-container">
+            <input type="range" id="size" min="100" max="800" value="400" step="1">
+            <output id="sizeValue">400 px</output>
+          </div>
+		  <div class="range-editors">
+			<label>Value: <input type="number" id="sizeInput" value="200" "></label>
+		  </div>
+          <p class="description">Adjusts the dimensions of the display canvas.</p>
+        </div>
           <button id="downloadBtn" class="btn btn-download">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
               <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
