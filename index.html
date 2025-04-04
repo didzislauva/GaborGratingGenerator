@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Gabor Grating Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Advanced Gabor Grating Generator</h1>
+      <p class="subtitle">An interactive tool for visual perception research</p>
+    </header>
+    
+    <div class="card info-card">
+      <h2>About Gabor Gratings</h2>
+      <p>Gabor gratings are sinusoidal gratings modulated by an envelope function (commonly Gaussian). They are widely used in visual perception research because they effectively stimulate orientation-selective neurons in the visual cortex.</p>
+      
+      <h3>Key Applications:</h3>
+      <ul>
+        <li><strong>Vision Science:</strong> Used to study spatial frequency processing, contrast sensitivity, and orientation selectivity in the human visual system.</li>
+        <li><strong>Psychophysics:</strong> Employed in experiments examining visual attention, contour integration, and motion perception.</li>
+        <li><strong>Clinical Assessment:</strong> Used to diagnose visual processing disorders and amblyopia.</li>
+        <li><strong>Computer Vision:</strong> Applied in image processing, feature extraction, and texture analysis algorithms.</li>
+      </ul>
+      
+      <p>This tool allows you to customize various parameters including orientation, spatial frequency, phase, envelope type, and colors to create specific stimuli for research or educational purposes.</p>
+    </div>
+    
+    <div class="grid">
+      <div class="card">
+        <h2>Controls</h2>
+        
+        <div class="control">
+          <label for="orientation">Orientation (degrees)</label>
+          <div class="slider-container">
+            <input type="range" id="orientation" min="0" max="360" value="0" step="1">
+            <output id="orientationValue">0° (0.00 rad)</output>
+          </div>
+          <p class="description">Controls the angle of the grating lines. 0° is horizontal, 90° is vertical.</p>
+        </div>
+        
+        <div class="control">
+          <label for="phase">Phase (degrees)</label>
+          <div class="slider-container">
+            <input type="range" id="phase" min="0" max="360" value="0" step="1">
+            <output id="phaseValue">0° (0.00 rad)</output>
+          </div>
+          <p class="description">Shifts the position of the grating within its envelope. Controls whether the center has a peak or trough.</p>
+        </div>
+        
+        <div class="control">
+          <label for="periods">Number of Periods</label>
+          <div class="slider-container">
+            <input type="range" id="periods" min="1" max="20" value="5">
+            <output id="periodsValue">5 (freq: 0.0125 cyc/px)</output>
+          </div>
+          <p class="description">Determines the number of complete cycles visible within the stimulus (spatial frequency).</p>
+        </div>
+        
+        <div class="control">
+          <label for="size">Canvas Size (px)</label>
+          <div class="slider-container">
+            <input type="range" id="size" min="200" max="800" value="400" step="50">
+            <output id="sizeValue">400 px</output>
+          </div>
+          <p class="description">Adjusts the dimensions of the display canvas.</p>
+        </div>
+        
+        <div class="control">
+          <label for="sigma">Envelope Width (relative: 0.1–2)</label>
+          <div class="slider-container">
+            <input type="range" id="sigma" min="0.1" max="2" value="1" step="0.01">
+            <output id="sigmaValue">σ = auto</output>
+          </div>
+          <p class="description">Controls the width of the envelope. Higher values create a broader, more gradual fade-out.</p>
+        </div>
+        
+        <div class="control">
+          <label>Envelope Type</label>
+          <div class="envelope-options">
+            <div class="envelope-option active" data-envelope="gaussian">Gaussian</div>
+            <div class="envelope-option" data-envelope="linear">Linear</div>
+            <div class="envelope-option" data-envelope="cosine">Cosine</div>
+            <div class="envelope-option" data-envelope="hann">Hann</div>
+            <div class="envelope-option" data-envelope="hamming">Hamming</div>
+            <div class="envelope-option" data-envelope="circular">Circular</div>
+            <div class="envelope-option" data-envelope="rectangular">Rectangular</div>
+            <div class="envelope-option" data-envelope="none">None</div>
+          </div>
+          <p class="description">Select the type of envelope function to apply to the sinusoidal grating.</p>
+        </div>
+        
+        <div class="control">
+          <div class="section-title">Color Settings</div>
+          
+          <div class="color-container">
+            <label>Color 1 (Peaks)</label>
+            <div class="color-preview" id="color1Preview"></div>
+            <div class="color-inputs">
+              <div>
+                <label for="color1R" style="font-weight: normal;">R:</label>
+                <input type="number" id="color1R" min="0" max="255" value="255">
+              </div>
+              <div>
+                <label for="color1G" style="font-weight: normal;">G:</label>
+                <input type="number" id="color1G" min="0" max="255" value="255">
+              </div>
+              <div>
+                <label for="color1B" style="font-weight: normal;">B:</label>
+                <input type="number" id="color1B" min="0" max="255" value="255">
+              </div>
+            </div>
+          </div>
+          
+          <div class="color-container">
+            <label>Color 2 (Troughs)</label>
+            <div class="color-preview" id="color2Preview"></div>
+            <div class="color-inputs">
+              <div>
+                <label for="color2R" style="font-weight: normal;">R:</label>
+                <input type="number" id="color2R" min="0" max="255" value="0">
+              </div>
+              <div>
+                <label for="color2G" style="font-weight: normal;">G:</label>
+                <input type="number" id="color2G" min="0" max="255" value="0">
+              </div>
+              <div>
+                <label for="color2B" style="font-weight: normal;">B:</label>
+                <input type="number" id="color2B" min="0" max="255" value="0">
+              </div>
+            </div>
+          </div>
+          <p class="description">Define custom colors for the grating peaks and troughs.</p>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h2>Preview</h2>
+        <div class="canvas-container">
+          <canvas id="gaborCanvas" width="400" height="400"></canvas>
+          <button id="downloadBtn" class="btn btn-download">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+              <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+            </svg>
+            Download Grating
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <footer>
+      <p>This Advanced Gabor Grating Generator is designed for educational and research purposes.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
