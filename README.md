@@ -31,7 +31,7 @@ Gabor gratings are sinusoidal luminance patterns modulated by an envelope functi
 
 ## 📷 Preview & Interface
 
-![UI Screenshot](./screenshot.png)
+
 
 Each control is interactive and synchronized:
 - Sliders and number inputs stay in sync
