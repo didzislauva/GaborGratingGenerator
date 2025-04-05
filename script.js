@@ -6,6 +6,10 @@
     const phaseValue = document.getElementById("phaseValue");
     const sigmaSlider = document.getElementById("sigma");
     const sigmaValue = document.getElementById("sigmaValue");
+	const midLuminanceSlider = document.getElementById("midLuminance");
+	const contrastSlider = document.getElementById("contrast");
+	const midLuminanceValue = document.getElementById("midLuminanceValue");
+	const contrastValue = document.getElementById("contrastValue");
     
     // Envelope options
     const envelopeOptions = document.querySelectorAll('.envelope-option');
@@ -132,10 +136,21 @@
 		  const envelope = calculateEnvelope(dx, dy, sigma, size);
 		  const sinusoid = Math.cos(2 * Math.PI * frequency * xTheta + phaseRad);
 		  const gabor = envelope * sinusoid;
-		  const colorMix = (gabor + 1) / 2;
-		  const r = Math.round(c2r + colorMix * (c1r - c2r));
-		  const g = Math.round(c2g + colorMix * (c1g - c2g));
-		  const b = Math.round(c2b + colorMix * (c1b - c2b));
+		  
+		  
+		  // Midpoint and contrast logic
+			const mid = parseFloat(midLuminanceSlider.value);         // e.g., 128
+			const contrast = parseFloat(contrastSlider.value);        // 0–1
+			const range = Math.min(mid, 255 - mid) * contrast;        // max safe range
+			const value = mid + gabor * range;                        // gabor ∈ [-1,1]
+			const clamped = v => Math.max(0, Math.min(255, Math.round(v)));
+
+			// Apply grayscale to all channels
+			const r = clamped(value);
+			const g = clamped(value);
+			const b = clamped(value);
+		  
+		  
 		  const index = (y * size + x) * 4;
 		  data[index] = r;
 		  data[index + 1] = g;
@@ -206,6 +221,18 @@
 		color2R.addEventListener("input", () => drawGaborGrating());
 		color2G.addEventListener("input", () => drawGaborGrating());
 		color2B.addEventListener("input", () => drawGaborGrating());
+		
+		midLuminanceSlider.addEventListener("input", () => {
+		  midLuminanceValue.textContent = midLuminanceSlider.value;
+		  updateColorTextInputsFromMidContrast(); // ✅
+		  drawGaborGrating();
+		});
+
+		contrastSlider.addEventListener("input", () => {
+		  contrastValue.textContent = parseFloat(contrastSlider.value).toFixed(2);
+		  updateColorTextInputsFromMidContrast(); // ✅
+		  drawGaborGrating();
+		});
 
 
     // Initial draw on page load
@@ -311,6 +338,9 @@ window.addEventListener("load", () => {
   updateColorPreviews();
   drawGaborGrating();
   updatePeriodsLabel(); 
+  
+  midLuminanceValue.textContent = midLuminanceSlider.value;
+  contrastValue.textContent = parseFloat(contrastSlider.value).toFixed(2);
 });
 
 
@@ -331,4 +361,17 @@ function updatePeriodsLabel() {
   } else if (freqWarning) {
     freqWarning.style.display = "none";
   }
+}
+
+function updateColorTextInputsFromMidContrast() {
+  const mid = parseFloat(midLuminanceSlider.value);
+  const contrast = parseFloat(contrastSlider.value);
+  const range = Math.min(mid, 255 - mid) * contrast;
+
+  const color1 = Math.round(mid + range);
+  const color2 = Math.round(mid - range);
+
+  // Update all RGB input boxes (grayscale)
+  [color1R, color1G, color1B].forEach(input => input.value = color1);
+  [color2R, color2G, color2B].forEach(input => input.value = color2);
 }

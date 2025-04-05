@@ -88,7 +88,7 @@
             <output id="sigmaValue">σ = auto</output>
           </div>
 		  <div class="range-editors">
-			<label>Value: <input type="number" id="sigmaInput" value="1"></label>
+			<label>Value: <input type="number" id="sigmaInput" value="1" step="0.01"></label>
 			<label>Min: <input type="number" id="sigmaMin" value="0.1"></label>
 			<label>Max: <input type="number" id="sigmaMax" value="2"></label>
 			<label>Step: <input type="number" id="sigmaStep" value="0.1" step="0.1"></label>
@@ -110,6 +110,24 @@
           </div>
           <p class="description">Select the type of envelope function to apply to the sinusoidal grating.</p>
         </div>
+		
+		<div class="control">
+		  <label for="midLuminance">Background Luminance</label>
+		  <div class="slider-container">
+			<input type="range" id="midLuminance" min="0" max="255" value="128" step="1">
+			<output id="midLuminanceValue">128</output>
+		  </div>
+		  <p class="description">Defines the midpoint gray value around which contrast is applied.</p>
+		</div>
+
+		<div class="control">
+		  <label for="contrast">Contrast (0–1)</label>
+		  <div class="slider-container">
+			<input type="range" id="contrast" min="0" max="1" value="1" step="0.01">
+			<output id="contrastValue">1.00</output>
+		  </div>
+		  <p class="description">Scales brightness difference from the background level. Limited by proximity to 0 and 255.</p>
+		</div>
         
         <div class="control">
           <div class="section-title">Color Settings</div>
